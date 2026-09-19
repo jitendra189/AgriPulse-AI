@@ -149,7 +149,7 @@ export default function ProfitPage() {
   );
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-900">
+    <PageContainer>
       <section className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-6 sm:px-8">
           <div>
