@@ -246,7 +246,7 @@ export default function ProfitPage() {
                     <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
                       Selected crop
                     </p>
-                    <h2 className="mt-1 text-xl font-bold">{profit.commodity}</h2>
+                    <h2 className="mt-1 text-xl font-bold text-slate-900">{profit.commodity}</h2>
                   </div>
                   <span className="rounded-full bg-amber-50 px-3 py-1.5 text-xs font-bold text-amber-700">
                     Development assumptions
@@ -268,7 +268,7 @@ export default function ProfitPage() {
                   <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
                     Scenario analysis
                   </p>
-                  <h2 className="mt-1 text-xl font-bold">
+                  <h2 className="mt-1 text-xl font-bold text-slate-900">
                     Downside, expected and upside
                   </h2>
                 </div>
@@ -279,7 +279,7 @@ export default function ProfitPage() {
                       key={scenario.scenario}
                       className={`rounded-xl border p-4 ${scenarioClass(scenario.scenario)}`}
                     >
-                      <p className="text-xs font-bold uppercase tracking-wider">
+                      <p className="text-xs font-bold uppercase tracking-wider text-slate-900">
                         {scenario.scenario}
                       </p>
                       <p className="mt-3 text-2xl font-bold">
