@@ -1752,7 +1752,7 @@ export default function Home() {
 
                                 <span className="text-xs font-semibold text-slate-500">
                                   {money(
-                                    scenario.scenario_price
+                                    scenario.scenario_price_inr_per_quintal
                                   )}
                                 </span>
 
@@ -1768,7 +1768,7 @@ export default function Home() {
 
                                   <p className="mt-1 text-xs font-bold">
                                     {money(
-                                      scenario.revenue
+                                      scenario.revenue_inr
                                     )}
                                   </p>
 
@@ -1782,7 +1782,7 @@ export default function Home() {
 
                                   <p className="mt-1 text-xs font-bold text-emerald-700">
                                     {money(
-                                      scenario.gross_margin
+                                      scenario.gross_margin_inr
                                     )}
                                   </p>
 
@@ -1796,7 +1796,7 @@ export default function Home() {
 
                                   <p className="mt-1 text-xs font-bold">
                                     {money(
-                                      scenario.break_even_price
+                                      scenario.break_even_price_inr_per_quintal
                                     )}
                                   </p>
 
