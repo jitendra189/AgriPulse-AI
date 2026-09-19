@@ -34,6 +34,11 @@ const navigation = [
     href: "/insights",
     icon: "✦",
   },
+  {
+    name: "Farmer Profile",
+    href: "/profile",
+    icon: "◉",
+  },
 ];
 
 export default function Sidebar() {
