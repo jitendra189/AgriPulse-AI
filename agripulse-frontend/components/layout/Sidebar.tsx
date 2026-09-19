@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 const navigation = [
   {
     name: "Dashboard",
-    href: "/",
+    href: "/dashboard",
     icon: "⌂",
   },
   {
@@ -65,7 +65,7 @@ export default function Sidebar() {
 
         {navigation.map((item) => {
           const isActive =
-            item.href === "/"
+            item.href === "/dashboard"
               ? pathname === "/"
               : pathname.startsWith(item.href);
 
