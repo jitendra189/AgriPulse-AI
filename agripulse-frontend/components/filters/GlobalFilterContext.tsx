@@ -297,6 +297,11 @@ export function GlobalFilterProvider({
 
   function resetFilters() {
     setFilters(DEFAULT_FILTERS);
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (error) {
+      console.error("Failed to clear saved AgriPulse filters:", error);
+    }
   }
 
   return (

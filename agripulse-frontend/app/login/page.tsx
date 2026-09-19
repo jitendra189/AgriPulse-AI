@@ -52,7 +52,10 @@ export default function LoginPage() {
         }
       );
 
-      const data = await response.json();
+      const contentType = response.headers.get("content-type") || "";
+      const data = contentType.includes("application/json")
+        ? await response.json()
+        : null;
 
       if (!response.ok) {
         if (typeof data?.detail === "string") {
