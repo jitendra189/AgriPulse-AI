@@ -3,6 +3,7 @@ from app import models
 from fastapi import FastAPI
 from app.routers import auth
 from fastapi.middleware.cors import CORSMiddleware
+from app.config import CORS_ORIGINS, ENVIRONMENT
 
 from app.routers import (
     market,
@@ -34,10 +35,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-    ],
+    allow_origins=CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -66,13 +64,26 @@ def root():
 
 @app.get("/health")
 def health():
-    """
-    Verify that all AgriPulse CSV datasets are available
-    and readable.
-    """
+    """Check application and dataset health."""
     from app.repository import repository
+    return {"environment": ENVIRONMENT, **repository.health_check()}
 
-    return repository.health_check()
+
+@app.get("/health/live")
+def health_live():
+    """Liveness probe: the process is running."""
+    return {"status": "alive"}
+
+
+@app.get("/health/ready")
+def health_ready():
+    """Readiness probe: required datasets are available."""
+    from fastapi import HTTPException
+    from app.repository import repository
+    result = repository.health_check()
+    if result.get("status") != "healthy":
+        raise HTTPException(status_code=503, detail=result)
+    return {"status": "ready"}
 
 
 # ============================================================
