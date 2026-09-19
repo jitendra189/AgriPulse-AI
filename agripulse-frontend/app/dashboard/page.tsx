@@ -98,13 +98,13 @@ type Profit = {
 
 type Scenario = {
   commodity: string;
-  scenario: string;
-  scenario_price: number;
-  total_yield_quintals: number;
-  total_cost: number;
-  revenue: number;
-  gross_margin: number;
-  break_even_price: number;
+  scenario: "DOWNSIDE" | "EXPECTED" | "UPSIDE";
+  scenario_price_inr_per_quintal: number;
+  total_yield_quintal: number;
+  total_cost_inr: number;
+  revenue_inr: number;
+  gross_margin_inr: number;
+  break_even_price_inr_per_quintal: number;
 };
 
 type Explanation = {
@@ -1744,7 +1744,7 @@ export default function Home() {
 
                               <div className="flex items-center justify-between">
 
-                                <span className="text-xs font-bold">
+                                <span className="text-xs font-bold text-slate-900">
                                   {
                                     scenario.scenario
                                   }
