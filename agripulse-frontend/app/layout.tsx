@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { GlobalFilterProvider } from "@/components/filters/GlobalFilterContext";
+import SiteFooter from "@/components/layout/SiteFooter";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,6 +31,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <GlobalFilterProvider>
           {children}
+          <SiteFooter />
         </GlobalFilterProvider>
       </body>
     </html>

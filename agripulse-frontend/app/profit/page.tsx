@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useGlobalFilters } from "@/components/filters/GlobalFilterContext";
+import PageContainer from "@/components/layout/PageContainer";
 
 type ProfitRecord = {
   state: string;
@@ -22,14 +23,16 @@ type ProfitRecord = {
 };
 
 type Scenario = {
+  state: string;
+  district: string;
   commodity: string;
-  scenario: string;
-  scenario_price: number;
-  total_yield_quintals: number;
-  total_cost: number;
-  revenue: number;
-  gross_margin: number;
-  break_even_price: number;
+  scenario: "DOWNSIDE" | "EXPECTED" | "UPSIDE";
+  scenario_price_inr_per_quintal: number;
+  total_yield_quintal: number;
+  total_cost_inr: number;
+  revenue_inr: number;
+  gross_margin_inr: number;
+  break_even_price_inr_per_quintal: number;
 };
 
 const API_BASE_URL =
@@ -108,11 +111,16 @@ export default function ProfitPage() {
 
         setProfit(scopedProfit || profitRows[0] || null);
         setScenarios(
-          scenarioRows.filter((row) =>
-            scopedProfit
-              ? row.commodity === scopedProfit.commodity
-              : true
-          )
+          scenarioRows
+            .filter((row) =>
+              scopedProfit
+                ? row.commodity?.toLowerCase() === scopedProfit.commodity?.toLowerCase()
+                : true
+            )
+            .sort((a, b) => {
+              const order = { DOWNSIDE: 0, EXPECTED: 1, UPSIDE: 2 };
+              return order[a.scenario] - order[b.scenario];
+            })
         );
       } catch (err) {
         if (!cancelled) {
@@ -141,7 +149,7 @@ export default function ProfitPage() {
   );
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-900">
+    <PageContainer>
       <section className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-6 sm:px-8">
           <div>
@@ -172,11 +180,16 @@ export default function ProfitPage() {
             Crop: {crop}
           </span>
           <span className="rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-600">
-            State: {state}
+            Filter state: {state}
           </span>
           <span className="rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-600">
-            District: {district}
+            Filter district: {district}
           </span>
+          {profit && (
+            <span className="rounded-full bg-blue-50 px-3 py-1.5 text-xs font-semibold text-blue-700">
+              Scenario data: {profit.district}, {profit.state}
+            </span>
+          )}
         </div>
 
         {loading && (
@@ -270,15 +283,21 @@ export default function ProfitPage() {
                         {scenario.scenario}
                       </p>
                       <p className="mt-3 text-2xl font-bold">
-                        {money(scenario.gross_margin)}
+                        {money(scenario.gross_margin_inr)}
                       </p>
                       <p className="mt-1 text-xs text-slate-600">Gross margin</p>
 
                       <div className="mt-4 space-y-2 text-xs text-slate-700">
-                        <Row label="Scenario price" value={money(scenario.scenario_price)} />
-                        <Row label="Revenue" value={money(scenario.revenue)} />
-                        <Row label="Total cost" value={money(scenario.total_cost)} />
-                        <Row label="Break-even" value={money(scenario.break_even_price)} />
+                        <Row
+                          label="Scenario price"
+                          value={money(scenario.scenario_price_inr_per_quintal)}
+                        />
+                        <Row label="Revenue" value={money(scenario.revenue_inr)} />
+                        <Row label="Total cost" value={money(scenario.total_cost_inr)} />
+                        <Row
+                          label="Break-even"
+                          value={money(scenario.break_even_price_inr_per_quintal)}
+                        />
                       </div>
                     </div>
                   ))}
@@ -305,7 +324,7 @@ export default function ProfitPage() {
           </>
         )}
       </section>
-    </main>
+    </PageContainer>
   );
 }
 

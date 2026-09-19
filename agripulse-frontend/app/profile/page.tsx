@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
+import { useGlobalFilters } from "@/components/filters/GlobalFilterContext";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
 
@@ -112,6 +113,8 @@ function getAuthToken(): string | null {
 }
 
 export default function ProfilePage() {
+  const { syncFromProfile } = useGlobalFilters();
+
   const [loading, setLoading] = useState(true);
 
   const [saving, setSaving] = useState(false);
@@ -348,6 +351,13 @@ export default function ProfilePage() {
         data.forecast_horizon ||
           "1 Month"
       );
+
+      syncFromProfile({
+        state: data.state || null,
+        district: data.district || null,
+        primary_crop: data.primary_crop || null,
+        forecast_horizon: data.forecast_horizon || "1 Month",
+      });
 
       setSaved(true);
       setEditing(false);
