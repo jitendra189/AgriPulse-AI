@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const pageTitles: Record<string, string> = {
   "/": "AgriPulse AI",
@@ -15,6 +15,7 @@ const pageTitles: Record<string, string> = {
 
 export default function Header() {
   const pathname = usePathname();
+  const router = useRouter();
 
   const title =
     pageTitles[pathname] ||
@@ -66,6 +67,19 @@ export default function Header() {
             </p>
           </div>
         </Link>
+
+        <button
+          type="button"
+          onClick={() => {
+            localStorage.removeItem("agripulse_auth");
+            sessionStorage.removeItem("agripulse_auth");
+            localStorage.removeItem("agripulse-global-filters");
+            router.push("/login");
+          }}
+          className="rounded-xl border border-slate-200 px-3 py-2 text-xs font-bold text-slate-600 transition hover:border-red-200 hover:bg-red-50 hover:text-red-700"
+        >
+          Sign out
+        </button>
       </div>
     </header>
   );
