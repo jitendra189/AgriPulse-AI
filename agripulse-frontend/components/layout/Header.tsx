@@ -25,7 +25,7 @@ export default function Header() {
     "Agricultural Intelligence";
 
   return (
-    <header className="flex h-20 items-center justify-between border-b border-slate-200 bg-white px-8">
+    <header className="flex min-h-20 items-center justify-between gap-3 border-b border-slate-200 bg-white px-4 py-3 pl-16 sm:px-6 sm:pl-16 lg:px-8 lg:pl-8">
       {/* Page title */}
       <div>
         <h2 className="text-xl font-bold tracking-tight text-slate-900">
