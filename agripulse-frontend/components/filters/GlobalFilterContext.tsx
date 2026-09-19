@@ -21,6 +21,7 @@ type GlobalFilterContextType = GlobalFilters & {
   setCrop: (crop: string) => void;
   setHorizon: (horizon: number) => void;
   resetFilters: () => void;
+  syncFromProfile: (profile: ProfileResponse) => void;
 };
 
 type ProfileResponse = {
@@ -295,6 +296,47 @@ export function GlobalFilterProvider({
     }));
   }
 
+  function syncFromProfile(profile: ProfileResponse) {
+    const profileState =
+      isValidProfileFilterValue(profile.state)
+        ? profile.state!
+        : DEFAULT_FILTERS.state;
+
+    const profileDistrict =
+      isValidProfileFilterValue(profile.district)
+        ? profile.district!
+        : DEFAULT_FILTERS.district;
+
+    const profileCrop =
+      isValidProfileFilterValue(profile.primary_crop)
+        ? profile.primary_crop!
+        : DEFAULT_FILTERS.crop;
+
+    const nextFilters: GlobalFilters = {
+      state: profileState,
+      district:
+        profileState === "ALL"
+          ? "ALL"
+          : profileDistrict,
+      crop: profileCrop,
+      horizon: convertHorizonToNumber(profile.forecast_horizon),
+    };
+
+    setFilters(nextFilters);
+
+    try {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(nextFilters)
+      );
+    } catch (error) {
+      console.error(
+        "Failed to persist profile-backed AgriPulse filters:",
+        error
+      );
+    }
+  }
+
   function resetFilters() {
     setFilters(DEFAULT_FILTERS);
     try {
@@ -313,6 +355,7 @@ export function GlobalFilterProvider({
         setCrop,
         setHorizon,
         resetFilters,
+        syncFromProfile,
       }}
     >
       {children}
