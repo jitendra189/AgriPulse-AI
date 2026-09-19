@@ -3,7 +3,8 @@
 import { usePathname } from "next/navigation";
 
 const pageTitles: Record<string, string> = {
-  "/": "Agricultural Intelligence Dashboard",
+  "/": "AgriPulse AI",
+  "/dashboard": "Agricultural Intelligence Dashboard",
   "/market": "Market Forecast",
   "/comparison": "Crop Comparison",
   "/weather": "Weather Risk",
