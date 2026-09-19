@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const pageTitles: Record<string, string> = {
@@ -46,21 +47,25 @@ export default function Header() {
           </span>
         </div>
 
-        {/* User */}
-        <div className="flex items-center gap-3 border-l border-slate-200 pl-4">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-100 text-sm font-bold text-emerald-700">
+        {/* User / Profile */}
+        <Link
+          href="/profile"
+          aria-label="Open farmer profile"
+          className="group flex items-center gap-3 border-l border-slate-200 pl-4"
+        >
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-100 text-sm font-bold text-emerald-700 transition group-hover:bg-emerald-200">
             F
           </div>
 
           <div className="hidden sm:block">
-            <p className="text-sm font-semibold text-slate-800">
+            <p className="text-sm font-semibold text-slate-800 transition group-hover:text-emerald-700">
               Farmer Dashboard
             </p>
             <p className="text-[11px] text-slate-500">
-              Decision Support
+              View & edit profile
             </p>
           </div>
-        </div>
+        </Link>
       </div>
     </header>
   );
