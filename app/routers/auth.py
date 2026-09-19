@@ -6,11 +6,11 @@ from jose import jwt
 from pydantic import BaseModel, EmailStr, Field
 from sqlalchemy.orm import Session
 
-from app.auth import (
+from app.auth import get_current_user
+from app.config import (
     ACCESS_TOKEN_EXPIRE_MINUTES,
     ALGORITHM,
     SECRET_KEY,
-    get_current_user,
 )
 from app.database import get_db
 from app.models import User
