@@ -1,3 +1,6 @@
+import os
+
+from dotenv import load_dotenv
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError, jwt
@@ -6,13 +9,6 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models import User
 
-
-# -------------------------------------------------------------------
-# JWT Configuration
-# -------------------------------------------------------------------
-
-import os
-from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -24,33 +20,35 @@ if not SECRET_KEY:
     )
 
 ALGORITHM = os.getenv("ALGORITHM", "HS256")
-ALGORITHM = "HS256"
 
+try:
+    ACCESS_TOKEN_EXPIRE_MINUTES = int(
+        os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "60")
+    )
+except ValueError as exc:
+    raise RuntimeError(
+        "ACCESS_TOKEN_EXPIRE_MINUTES must be an integer."
+    ) from exc
 
-# -------------------------------------------------------------------
-# HTTP Bearer Authentication
-# -------------------------------------------------------------------
+if ACCESS_TOKEN_EXPIRE_MINUTES <= 0:
+    raise RuntimeError(
+        "ACCESS_TOKEN_EXPIRE_MINUTES must be greater than zero."
+    )
+
 
 security = HTTPBearer()
 
-
-# -------------------------------------------------------------------
-# Get Current User
-# -------------------------------------------------------------------
 
 def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security),
     db: Session = Depends(get_db),
 ) -> User:
-
     token = credentials.credentials
 
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate authentication credentials.",
-        headers={
-            "WWW-Authenticate": "Bearer",
-        },
+        headers={"WWW-Authenticate": "Bearer"},
     )
 
     try:
@@ -73,11 +71,7 @@ def get_current_user(
     except JWTError:
         raise credentials_exception
 
-    user = (
-        db.query(User)
-        .filter(User.id == user_id)
-        .first()
-    )
+    user = db.query(User).filter(User.id == user_id).first()
 
     if user is None:
         raise credentials_exception
